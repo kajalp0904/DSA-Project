@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import FollowButton from '../components/Users/FollowButton';
 
 const Discover = () => {
   const { user } = useAuth();
@@ -146,12 +147,15 @@ const Discover = () => {
               </div>
             )}
 
-            <button
-              onClick={() => handleConnect(person._id)}
-              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Connect
-            </button>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => handleConnect(person._id)}
+                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Connect
+              </button>
+              <FollowButton targetId={person._id} />
+            </div>
           </motion.div>
         ))}
       </div>
