@@ -71,5 +71,38 @@ router.post('/:postId/like', auth, async (req, res) => {
   }
 });
 
+// Add comment
+router.post('/:postId/comments', auth, async (req, res) => {
+  try {
+    const { text } = req.body;
+    if (!text) return res.status(400).json({ message: 'Text is required' });
+    const post = await Post.findById(req.params.postId);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+    post.comments.push({ user: req.userId, text });
+    await post.save();
+    const populated = await Post.findById(post._id)
+      .populate('author', 'name profilePic')
+      .populate('comments.user', 'name profilePic');
+    res.status(201).json(populated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Delete comment
+router.delete('/:postId/comments/:commentId', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+    const before = post.comments.length;
+    post.comments = post.comments.filter(c => c._id.toString() !== req.params.commentId);
+    if (post.comments.length === before) return res.status(404).json({ message: 'Comment not found' });
+    await post.save();
+    res.json({ message: 'Comment removed' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router;
 
