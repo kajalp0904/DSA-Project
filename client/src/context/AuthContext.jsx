@@ -35,9 +35,15 @@ export const AuthProvider = ({ children }) => {
     // Check for existing token on mount
     const token = localStorage.getItem('token');
     if (token) {
-      // Optionally verify token with server
-      // For now, we'll just set a dummy user
-      setUser({ id: 'guest', name: 'User' });
+      (async () => {
+        try {
+          const me = await axios.get('/api/auth/me');
+          setUser({ id: me.data._id, name: me.data.name, email: me.data.email, profilePic: me.data.profilePic });
+        } catch (e) {
+          localStorage.removeItem('token');
+          setUser(null);
+        }
+      })();
     }
     setLoading(false);
   }, []);

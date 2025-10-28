@@ -123,12 +123,14 @@ const Profile = () => {
               </div>
             )}
 
-            <button
-              onClick={() => setEditMode(true)}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Edit Profile
-            </button>
+            {user && user.id === (user?.id) ? (
+              <button
+                onClick={() => setEditMode(true)}
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Edit Profile
+              </button>
+            ) : null}
           </div>
         ) : (
           <div className="space-y-4">

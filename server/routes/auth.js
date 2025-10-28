@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const auth = require('../middleware/auth');
 
 // Generate JWT Token
 const generateToken = (userId) => {
@@ -85,4 +86,15 @@ router.post('/login', async (req, res) => {
 });
 
 module.exports = router;
+
+// Get current user (me)
+router.get('/me', auth, async (req, res) => {
+  try {
+    const me = await User.findById(req.userId).select('-password');
+    if (!me) return res.status(404).json({ message: 'User not found' });
+    res.json(me);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
