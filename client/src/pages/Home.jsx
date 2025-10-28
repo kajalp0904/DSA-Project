@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import Comments from '../components/Posts/Comments';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 
@@ -95,6 +96,10 @@ const Home = () => {
           </div>
         </div>
       </motion.div>
+
+      {/* Quick Comments Demo (optional placeholder post) */}
+      {/* This is optional wiring to ensure the Comments component is available.
+          In a real app, you would render Comments inside a PostCard list. */}
     </div>
   );
 };
